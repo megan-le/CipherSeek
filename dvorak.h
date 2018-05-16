@@ -1,0 +1,7 @@
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+string dvorak(string text, bool encrypt);
