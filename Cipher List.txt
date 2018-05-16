@@ -1,0 +1,12 @@
+Vigenere -- Megan
+Atbash -- Megan
+Caesar -- Abhi
+XOR -- Abhi
+SHA -- 
+RSA --
+Affine -- Abhi
+Keyword -- Megan
+Baconian -- 
+Beaufort -- 
+Gronsfeld -- 
+Hill -- 
