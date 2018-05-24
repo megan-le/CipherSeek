@@ -58,7 +58,7 @@ int main() {
   std::cout << keyword("Qdfp fp s htywlor cfmdto.", "secret", false) << '\n';
   std::cout << dvorak("This is a Dvorak cipher.", true) << endl;
   std::cout << dvorak("Ydco co a Ekrpat jcld.pv", false) << endl;
-  int b = 16427*16361;
+  int b = 268762147;
   string a = encrypt_r("TEST",b,47);
   std::cout << a << "\n";
   std::cout << decrypt_r(a,b,47); 
