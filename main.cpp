@@ -5,6 +5,7 @@
 #include "keyword.h"
 #include "dvorak.h"
 #include "rsa.h"
+#include "bruteforce.h"
 #include <iostream>
 #include <iterator>
 #include <map>
