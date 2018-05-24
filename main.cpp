@@ -5,6 +5,10 @@
 #include "keyword.h"
 #include "dvorak.h"
 #include "rsa.h"
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <vector>
 
 double getChi2 (string str1) {
     double english_freq [26] = {
@@ -45,6 +49,62 @@ double getChi2 (string str1) {
     return chi2;
 }
 
+template <typename Iterator>
+Iterator compress_lzw(const string &uncompressed, Iterator result) {
+  int dictSize = 256;
+  map<string,int> dictionary;
+  for (int i = 0; i < 256; i++)
+    dictionary[string(1, i)] = i;
+ 
+  string w;
+  for (std::string::const_iterator it = uncompressed.begin();
+       it != uncompressed.end(); ++it) {
+    char c = *it;
+    string wc = w + c;
+    if (dictionary.count(wc))
+      w = wc;
+    else {
+      *result++ = dictionary[w];
+      // Add wc to the dictionary.
+      dictionary[wc] = dictSize++;
+      w = std::string(1, c);
+    }
+  }
+ 
+  // Output the code for w.
+  if (!w.empty())
+    *result++ = dictionary[w];
+  return result;
+}
+template <typename Iterator>
+std::string decompress_lzw(Iterator begin, Iterator end) {
+  // Build the dictionary.
+  int dictSize = 256;
+  std::map<int,std::string> dictionary;
+  for (int i = 0; i < 256; i++)
+    dictionary[i] = std::string(1, i);
+ 
+  std::string w(1, *begin++);
+  std::string result = w;
+  std::string entry;
+  for ( ; begin != end; begin++) {
+    int k = *begin;
+    if (dictionary.count(k))
+      entry = dictionary[k];
+    else if (k == dictSize)
+      entry = w + w[0];
+    else
+      throw "Bad compressed k";
+ 
+    result += entry;
+ 
+    dictionary[dictSize++] = w + entry[0];
+ 
+    w = entry;
+  }
+  return result;
+}
+
 int main() {
   std::cout << affine("This is an Affine Cipher",3,8,true) << "\n";
   std::cout << affine("Ndgk gk iv Ixxgvu Ogbduh",3,8,false) << "\n";
@@ -62,6 +122,12 @@ int main() {
   string a = encrypt_r("TEST",b,47);
   std::cout << a << "\n";
   std::cout << decrypt_r(a,b,47); 
+  std::vector<int> compressed;
+  compress_lzw("WABBAWABBA", std::back_inserter(compressed));
+  copy(compressed.begin(), compressed.end(), std::ostream_iterator<int>(std::cout, ", "));
+  std::cout << std::endl;
+  std::string decompressed = decompress_lzw(compressed.begin(), compressed.end());
+  std::cout << decompressed << std::endl;
   std::cout << getChi2("But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?") << "\n";
   std::cout << getChi2("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?") << "\n";
 }
