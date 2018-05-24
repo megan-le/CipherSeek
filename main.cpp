@@ -6,6 +6,7 @@
 #include "dvorak.h"
 #include "rsa.h"
 #include "bruteforce.h"
+#include "hill.h"
 #include <iostream>
 #include <iterator>
 #include <map>
