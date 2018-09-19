@@ -3,11 +3,11 @@ Atbash -- Megan
 Caesar -- Abhi
 XOR -- Abhi
 SHA -- 
-RSA --
+RSA -- Abhi
 Affine -- Abhi
 Keyword -- Megan
 Baconian -- 
 Beaufort -- 
 Gronsfeld -- 
-Hill -- 
+Hill -- Megan
 Dvorak -- Megan
