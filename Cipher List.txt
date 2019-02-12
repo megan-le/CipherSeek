@@ -11,3 +11,4 @@ Beaufort --
 Gronsfeld -- 
 Hill -- Megan
 Dvorak -- Megan
+brute force algorithm -- Megan
